@@ -8,7 +8,6 @@ export default function NFTGallery({}) {
   const [pageKey, setPageKey] = useState();
   const [spamFilter] = useState(false);
   const [isLoading, setIsloading] = useState(false);
-  const [chain] = useState(process.env.NEXT_PUBLIC_ALCHEMY_NETWORK);
   const [apiEndpoint] = useState(process.env.NEXT_PUBLIC_NFT_BY_COLLECION_API_URL);
 
   const fetchNFTs = async (pagekey) => {
