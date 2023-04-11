@@ -1,5 +1,4 @@
 import { Network, Alchemy } from "alchemy-sdk";
-const fitNFTContractABI = require("../../artifacts/FITNFT-abi.json");
 
 export default async function handler(req, res) {
   const { currentMonth } = JSON.parse(req.body);
@@ -45,6 +44,7 @@ export default async function handler(req, res) {
     });
 
     // Filter NFTs using current month
+
     const filteredNfts = formattedNfts.filter(
       (nft) => new Date(nft.birthday).getMonth() === currentMonth
     );

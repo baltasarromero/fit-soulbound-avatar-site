@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/MvpGallery.module.css";
-import NftCard from "./nftCard";
+import MvpNFTCard from "./mvpNFTCard";
 
 export default function MVPGallery({}) {
   const [previousMvps, setPreviousMVPs] = useState();
@@ -71,7 +71,7 @@ export default function MVPGallery({}) {
           <div className={styles.mvp_gallery}>
             <div className={styles.mvps_current_display}>
               {currentMVP != null? (
-                  <NftCard key={currentMVP.tokenId} nft={currentMVP} />
+                  <MvpNFTCard key={currentMVP.tokenId} nft={currentMVP} />
                 )
                 : (
                 <div className={styles.loading_box}>
@@ -87,7 +87,7 @@ export default function MVPGallery({}) {
             <div className={styles.nfts_display}>
               {previousMvps?.length ? (
                 previousMvps.map((nft) => {
-                  return <NftCard key={nft.tokenId} nft={nft} />;
+                  return <MvpNFTCard key={nft.tokenId} nft={nft} />;
                 })
               ) : (
                 <div className={styles.loading_box}>

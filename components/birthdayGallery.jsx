@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/MvpGallery.module.css";
-import NftCard from "./nftCard";
+import BirthdayNFTCard from "./birthdayNFTCard";
 
 export default function BirthdayGallery({}) {
   const [birthdays, setBirthdays] = useState();
@@ -19,13 +19,14 @@ export default function BirthdayGallery({}) {
     setBirthdayText(birthdayTest);
   }
 
+
   const fetchBirthdays = async () => {
     setIsloading(true);
     try {
       const res = await fetch(apiEndpoint, {
         method: "POST",
         body: JSON.stringify({
-          currentMonth: new Date().getMonth()
+          currentMonth: new Date().getMonth() // use current month to retrieve all NFTs that have a birthday this month
         }),
       }).then((res) => res.json());
 
@@ -69,7 +70,7 @@ export default function BirthdayGallery({}) {
             <div className={styles.nfts_display}>
               {birthdays?.length ? (
                 birthdays.map((nft) => {
-                  return <NftCard key={nft.tokenId} nft={nft} />;
+                  return <BirthdayNFTCard key={nft.tokenId} nft={nft} />;
                 })
               ) : (
                 <div className={styles.mvp_titles}>
