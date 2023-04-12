@@ -1,5 +1,22 @@
 import { Network, Alchemy } from "alchemy-sdk";
 
+import { ZeroAddress, ethers } from "ethers";
+const fitNFTContractABI = require("../../artifacts/FITNFT-abi.json");
+// Get MVP values
+const months = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
 export default async function handler(req, res) {
   const { pageKey, pageSize } = JSON.parse(req.body);
   if (req.method !== "POST") {
@@ -10,15 +27,37 @@ export default async function handler(req, res) {
     apiKey: process.env.ALCHEMY_API_KEY,
     network: Network[process.env.ALCHEMY_NETWORK],
   };
+
   const alchemy = new Alchemy(settings);
+  const provider = await alchemy.config.getProvider();
 
   try {
-    const nfts = await alchemy.nft.getNftsForContract(
-      process.env.FOLDER_NFT_CONTRACT_ADDRESS,
-      {
-        pageKey: pageKey ? pageKey : null,
-        pageSize: pageSize ? pageSize : null,
+    // Get contract address
+    const fitNFTAddress = process.env.FOLDER_NFT_CONTRACT_ADDRESS;
+
+    // Load the contract
+    const fitNFTContract = new ethers.Contract(
+      fitNFTAddress,
+      fitNFTContractABI,
+      provider
+    );
+
+    // Retrieve MVP arrays from contract storage
+    const mvps = await fitNFTContract.getMontlhyMvps();
+    // Map of mvps where the key is the tokenID and the value is the month when they were MVP
+    let mvpsByTokenIdMap = new Object();
+
+    if (Array.isArray(mvps) && mvps.length) {
+      for (const [index, mvp] of mvps.entries()) {
+        if (mvp[0] != ZeroAddress) {
+          mvpsByTokenIdMap[mvp[1]] = months[index];
+        }
       }
+    }
+
+    // Get NFTs from FIT NFT collection using alchemy's API
+    const nfts = await alchemy.nft.getNftsForContract(
+      process.env.FOLDER_NFT_CONTRACT_ADDRESS
     );
 
     const formattedNfts = nfts.nfts.map((nft) => {
@@ -36,8 +75,12 @@ export default async function handler(req, res) {
         tokenType,
         tokenId,
         title: rawMetadata.fullName,
+        employeeName: rawMetadata.fullName,
+        birthday: rawMetadata.birthday,
         description,
         format: media[0]?.format ? media[0]?.format : "png",
+        mvp: mvpsByTokenIdMap[tokenId],
+        yearlyMVP: false,
       };
     });
 
@@ -52,7 +95,8 @@ export default async function handler(req, res) {
   } catch (e) {
     console.warn(e);
     res.status(500).send({
-      message: "something went wrong while retrieving NFTs by collection",
+      message:
+        "something went wrong while retrieving the NFTs from the collection",
     });
   }
 }

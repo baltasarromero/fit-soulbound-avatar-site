@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/NftGallery.module.css";
-import NftCard from "./nftCard";
+import NFTCardV2 from "./nftCardV2";
 
 export default function NFTGallery({}) {
-  const [nfts, setNfts] = useState();2
+  const [nfts, setNfts] = useState();
   const [fetchMethod] = useState("collection");
   const [pageKey, setPageKey] = useState();
   const [spamFilter] = useState(false);
@@ -58,7 +58,7 @@ export default function NFTGallery({}) {
           <div className={styles.nfts_display}>
             {nfts?.length ? (
               nfts.map((nft) => {
-                return <NftCard key={nft.tokenId} nft={nft} />;
+                return <NFTCardV2 key={nft.tokenId} nft={nft} />;
               })
             ) : (
               <div className={styles.loading_box}>
