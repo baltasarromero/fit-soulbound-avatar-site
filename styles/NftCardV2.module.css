@@ -48,13 +48,13 @@
 	align-items: center;
   }
   
-  .title_container {
+.title_container {
 	display: flex;
 	margin-top: 0.8rem;
 	margin-bottom: 0.8rem;
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
+	-webkit-box-orient: horizontal;
 	overflow: hidden;
 	text-overflow: ellipsis;
   }
@@ -77,10 +77,15 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
   }
+
+  .name_info_container {
+	display: inline-block;
+	flex: 1;
+  }
   
-  .details_container {
+  .mvp_info_container {
 	margin-top: 0.25em;
-	display: flex;
+	display: inline-block;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	width: 90%;

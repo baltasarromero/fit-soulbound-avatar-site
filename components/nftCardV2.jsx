@@ -1,10 +1,34 @@
 import styles from "../styles/NftCardV2.module.css";
 import { FaMedal, FaBirthdayCake } from "react-icons/fa";
 
-const displayBirthday = function (birthday) =>   {
+const displayBirthday =  (birthday) =>   {
+  // Birth date
+  const birthDate = new Date(birthday);
+  
+  // Current date
+  let currentYearBirthday = new Date();
 
+  if (birthDate.getMonth() === currentYearBirthday.getMonth()) {
+    currentYearBirthday.setDate(birthDate.getUTCDate());
+    currentYearBirthday.setMonth(birthDate.getMonth());
+    console.log("current date", currentYearBirthday);
+    
+    // Get the current year and calculate the age
+    const currentYear = currentYearBirthday.getFullYear();
+    const age = currentYear - birthDate.getFullYear();
+    const date = currentYearBirthday.getUTCDate();
+
+    // Get the day of the week from the input date
+    // Create an array of weekday names
+    var weekdays = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+    var weekday = weekdays[currentYearBirthday.getUTCDay()];
+    
+    // Return the formatted output
+    return `${weekday} ${date} - ${age} años `;
+  } else {
+    return ""
+  }  
 }
-
 
 export default function NftCardV2({ nft }) {
     return (
@@ -20,7 +44,7 @@ export default function NftCardV2({ nft }) {
         </div>
         <div className={styles.info_container}>
           <div className={styles.title_container}>
-            <h3>{nft.title}</h3>
+            <h3 className={styles.name_info_container}>{nft.title}</h3>
           </div>
           <hr className={styles.separator} />
           <div className={styles.symbol_contract_container}>
@@ -53,8 +77,7 @@ export default function NftCardV2({ nft }) {
           </div>
   
           <div style={{display: 'flex'}}>
-            {nft.birthday ?  (<div className={styles.details_container}>{nft.birthday}</div> ) : ("")}
-            {nft.mvp ?  (<div className={styles.details_container}><FaMedal style={{color: 'silver', fontSize: '25px'}}/>{nft.mvp}</div> ) : ("")}    
+            {nft.birthday ?  (<div className={styles.details_container}>{displayBirthday(nft.birthday)}</div> ) : ("")}
           </div>
         </div>
       </div>
